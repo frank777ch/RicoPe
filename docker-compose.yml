@@ -1,0 +1,29 @@
+services:
+  web:
+    image: odoo:18.0
+    container_name: ricope_web
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ricope-web-data:/var/lib/odoo
+      - ./ricope_addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=${DB_USER}
+      - PASSWORD=${DB_PASSWORD}
+
+  db:
+    image: postgres:15
+    container_name: ricope_db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+    volumes:
+      - ricope-db-data:/var/lib/postgresql/data
+
+volumes:
+  ricope-web-data:
+  ricope-db-data:
